@@ -44,6 +44,7 @@ const UserInformationSlice = createSlice({
             state.refreshToken = '';
             state.userFirstName = '';
             state.userLastName = '';
+
         },
         setUserFirstName: (state, actions) => {
             state.userFirstName = actions.payload.UserFirstName;

@@ -21,3 +21,21 @@ export function LocalStoringThird(UserProfileImageUri) {
     AsyncStorage.setItem('UserProfileImageUri', UserProfileImageUri);
 
 }
+
+
+
+export function EmptyStorage() {
+
+
+    AsyncStorage.removeItem('localId');
+    AsyncStorage.removeItem('idToken');
+    AsyncStorage.removeItem('expiresId');
+    AsyncStorage.removeItem('email');
+    AsyncStorage.removeItem('refreshToken');
+    AsyncStorage.removeItem('UserFirstName');
+    AsyncStorage.removeItem('UserLastName');
+    AsyncStorage.removeItem('UserProfileImageUri');
+
+
+
+}

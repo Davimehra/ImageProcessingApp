@@ -22,6 +22,7 @@ import LoadingScreen from './components/Loading/LoadingOverlay';
 import { resetEveryImageState } from "./redux/ImageUriSlice";
 import { resetEveryUserInformationState } from './redux/UserInformationSlice';
 import { color } from 'react-native-reanimated';
+import { EmptyStorage } from './components/AutoLogin/AsyncStorageData';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -40,6 +41,7 @@ export default function App() {
   }
 
   function DrawerCustome({ props, DrawerOf }) {
+    const dispatch = useDispatch();
     const email = useSelector((state) => state.UserInformationReducer.email);
     const UserProfileImage = useSelector((state) => state.ImageUriReducer.UserImageUri);
     const UserFirstName = useSelector((state) => state.UserInformationReducer.userFirstName);
@@ -71,6 +73,21 @@ export default function App() {
         {(DrawerOf === 'ImageProcessingScreen') ? ImageProcessingOptionsTitle : null}
         <View style={(DrawerOf === 'ImageProcessingScreen') ? [styles.drawerContentContainerStyle, { marginTop: 1, }] : styles.drawerContentContainerStyle}>
           <DrawerItemList  {...props} />
+
+
+          <DrawerItem label={({ color, focused }) => {
+            return (
+              <View style={{ flexDirection: "row", paddingLeft: 5, paddingTop: 3, alignItems: "center", }}>
+                <Ionicons name='log-out' size={28} color='hsl(24, 96%, 55%)' />
+                <Text style={{ fontWeight: 'bold', marginLeft: 20, fontSize: 13, fontWeight: 'bold', paddingBottom: 5 }}>Log Out</Text>
+              </View>
+            )
+          }} onPress={() => {
+            dispatch(resetEveryImageState());
+            dispatch(resetEveryUserInformationState());
+            EmptyStorage();
+          }} style={{ borderRadius: 20 }} />
+
         </View>
       </DrawerContentScrollView>
     )
@@ -95,7 +112,7 @@ export default function App() {
         };
         return (<DrawerCustome props={filteredProps} />)
 
-      }} initialRouteName='Welcome_Screen' screenOptions={styles.DrawerStyling}>
+      }} initialRouteName='Welcome_Screen' screenOptions={styles.DrawerStyling} >
         <Drawer.Screen name="Welcome_Screen" component={Welcome_Screen} options={drawerOptions[drawerOptions.indexOf(Welcome_Screen_Options)]} />
         <Drawer.Screen name='Live_Location_Screen' component={A_Live_L_Device_Select_Screen} options={drawerOptions[drawerOptions.indexOf(Live_Location)]} />
         <Drawer.Screen name="Camera_Image_Processing_Screen" component={Post_Selected_Image_Screen} options={drawerOptions[drawerOptions.indexOf(Camera_Image_Processing)]} />
@@ -103,7 +120,7 @@ export default function App() {
 
         <Drawer.Screen name='ImageProcessingDrawer' component={ImageOptionsDrawer} options={{ headerShown: false }} />
         <Drawer.Screen name="User_Info_Screen" component={User_Info_Screen} options={drawerOptions[drawerOptions.indexOf(User_Info)]} />
-        <Drawer.Screen name="LogOut_Screen" component={LogIn_Screen} options={
+        {/* <Drawer.Screen name="LogOut_Screen" component={LogIn_Screen} options={
           {
             headerTintColor: 'hsl(24, 96%, 55%)',
             drawerLabel: '',
@@ -118,25 +135,11 @@ export default function App() {
 
               </View>
             </Pressable>
-          }} />
+          }} /> */}
       </Drawer.Navigator>
     )
   }
 
-
-  // drawerIcon: (({ color, focused, size }) => {
-  //     return (
-  //         <LogOut_button
-  //             iconName="log-out"
-  //             color='hsl(24, 96%, 55%)' size={size}
-  //             title="Logout"
-  //             library='Ionicons'
-  //             focused={focused}
-  //         />)
-  // }),
-  // // headerStyle: { backgroundColor: "hsl(24, 96%, 55%)" },
-  // // drawerContentStyle: { backgroundColor: 'hsl(24, 96%, 55%)' }
-  // headerTintColor: 'hsl(24, 96%, 55%)'
 
 
   function AuthenticatedContainerNavigator() {  // Will Contain all Authenticated Screen After User Login
@@ -171,7 +174,6 @@ export default function App() {
       <Provider store={store}>
         <MenuProvider>
           <TopNavigationContainer />
-
         </MenuProvider>
       </Provider>
 
